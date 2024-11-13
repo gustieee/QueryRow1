@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+
+        .active {
+            display: flex;
+            flex-direction: column;
+            transform: translateX(-500px);
+            transition: transform 0.5s ease;
+        }
+
+        .nonActive {
+            display: flex;
+            transform: translateX(0px);
+            flex-direction: column;
+            transition: transform 0.5s ease;
+        }
+
+        .Jarum {
+            animation: spin 2s linear infinite;
+        }
+
+        .add-task {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .deleteConfirm {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-300 relative p-4 font-['Poppins']" id="home">
+    <!-- add task -->
+    <div id="addTask" class="add-task absolute z-10 text-start md:w-1/3 w-2/3">
+        <div class="bg-white border-2 border-black shadow-lg p-3 flex flex-col gap-3">
+            <label for="newTask">Task Name</label>
+            <input id="newTask" class="text w-full px-2 border-2" required placeholder="Enter New Task">
+            <label for="newDateTime">Date Time</label>
+            <input id="newDateTime" type="datetime-local" class="border-2">
+            <label for="" class="font-semibold">Category</label>
+            <div class="flex flex-col justify-center gap-2">
+                <select id="category" required class="border-2 py-2">
+                    <option value="Works">Works</option>
+                </select>
+            </div>
+
+            <!-- button -->
+            <div class="justify-between flex mt-3 text-white">
+                <button id="cancelButton" class="bg-red-500 px-3 py-2 rounded-lg" type="button">Cancel</button>
+                <button id="confirmButton" class="bg-green-500 px-3 py-2 rounded-lg" type="button">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm -->
+    <div id="deleteConfirm" class="deleteConfirm absolute z-50 text-start">
+        <div class="bg-white rounded-xl text-center border-2 border-black shadow-lg p-3 flex flex-col gap-5">
+            <h1 class="font-bold text-3xl">Do you want to delete it?</h1>
+            <div class="flex justify-between px-5">
+                <button id="cancelDeleteButton" class="bg-red-500 px-3 py-2 rounded-lg" type="button">Cancel</button>
+                <button id="confirmDeleteButton" class="bg-green-500 px-3 py-2 rounded-lg" type="button">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="flex gap-3">
+        <div id="container" class="fixed md:sticky md:top-4 top-0 -left-4 -bottom-4 pt-10 pb-16 gap-10 px-10 bg-white nonActive w-[250px] md:w-[350px] h-screen rounded-lg">
+            <div class="flex justify-between items-center gap-2">
+                <h1 class="text-3xl font-bold" id="text">QueryRow</h1>
+                <i class="bi bi-arrow-left-circle-fill text-2xl cursor-pointer" id="leftArrow"></i>
+            </div>
+            <div class="flex flex-col gap-5">
+                <p class="font-semibold text-[20px]" id="text">Main Menu</p>
+                <hr>
+                <div class="flex gap-3 cursor-pointer font-semibold items-center">
+                    <i class="bi bi-journal" id="text"></i>
+                    <a href="todo.html" id="text">To-do</a>
+                </div>
+                <div class="flex cursor-pointer gap-3 font-semibold items-center">
+                    <i class="bi bi-person" id="text"></i>
+                    <a href="personal.html" id="text">Personal</a>
+                </div>
+                <div class="flex cursor-pointer gap-3 font-semibold items-center">
+                    <i class="bi bi-person-workspace" id="text"></i>
+                    <a href="works.html" id="text">Works</a>
+                </div>
+                <div class="flex cursor-pointer gap-3 font-semibold items-center">
+                    <i class="bi bi-cash" id="text"></i>
+                    <a href="finance.html" id="text">Finance</a>
+                </div>
+            </div>
+            <div class="flex justify-evenly cursor-pointer bottom-0 transition-all mt-auto bg-gray-300 py-4 items-center rounded-md"
+                id="theme">
+                <div class="font-semibold bg-white py-2 px-4 rounded-md" id="Light">
+                    <p>Light</p>
+                </div>
+                <div class="font-semibold py-2 px-4 rounded-md" id="Dark">
+                    <p>Dark</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-3 w-full">
+            <div class="bg-white w-full rounded-lg flex -z-20 items-center justify-start px-10 h-[200px] sm:h-[150px]" id="subcontainer">
+                <div class="sm:flex sm:flex-row flex-col w-full justify-between items-center ">
+                    <div class="flex flex-col xl:text-3xl lg:text-2xl md:text-xl text-lg font-semibold">
+                        <p id="welcome">Good Night, <span class="text-blue-500 font-bold" id="person">Gusti</span> from
+                            <span class="text-blue-500 font-bold" id="major">Software Engineer</span>
+                        </p>
+                        <p class="xl:text-[15px] md:text-base text-sm text-gray-400">What do you plan to do today?</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="bi bi-arrow-down-circle -z-10 xl:text-3xl md:text-xl text-lg Jarum" id="text"></i>
+                        <div class="xl:text-3xl md:text-2xl text-lg font-semibold" id="clock">00:00:00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white flex flex-col w-[100%] py-5 px-10 rounded-lg h-full" id="subcontainer">
+                <p class="text-2xl font-semibold" id="text">Works Tasks</p>
+                <div class="mt-3 md:flex md:flex-row gap-3 md:gap-0 flex-col justify-between">
+                    <div class="w-full">
+                        <input id="taskInput" type="text" placeholder="Search You Task"
+                            class="md:w-1/3 w-1/2 border-2 py-3 px-3 rounded-s-lg">
+                        <button class="bi bi-search bg-blue-500 p-3 rounded-e-lg text-white"><i></i></button>
+                    </div>
+                    <div class="flex mt-3 md:mt-0">
+                        <button id="createTaskButton" type="button" class="bg-blue-500 p-3 md:p-0 rounded-lg text-white">Create
+                            Task</button>
+                    </div>
+                </div>
+                <ul id="taskList" class="mt-5">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="absolute pointer-events-none cursor-pointer opacity-0 top-0 py-[60px]" id="rightArrow">
+        <div class=" bg-white w-20 rounded-md -left-[60px] fixed  h-20">
+            <i class="bi bi-arrow-right-circle-fill flex justify-end items-center h-full px-2 text-2xl"></i>
+        </div>
+    </div>
+
+    <script>
+        const leftArrow = document.getElementById('leftArrow')
+        const container = document.getElementById('container')
+        const home = document.getElementById('home')
+        const texts = document.querySelectorAll('#text')
+        const theme = document.getElementById('theme')
+        const Light = document.getElementById('Light')
+        const Dark = document.getElementById('Dark')
+        const rightArrow = document.getElementById('rightArrow')
+        const subContainers = document.querySelectorAll('#subcontainer')
+        const clock = document.getElementById('clock')
+        const person = document.getElementById('person')
+        const major = document.getElementById('major')
+        const welcome = document.getElementById('welcome')
+        const createTaskButton = document.getElementById("createTaskButton");
+        const addTask = document.getElementById("addTask");
+        const cancelButton = document.getElementById("cancelButton");
+        const taskList = document.getElementById("taskList");
+        const confirmButton = document.getElementById('confirmButton')
+        const deleteConfirm = document.getElementById('deleteConfirm')
+        const taskInput = document.getElementById('taskInput')
+
+
+        // input search
+        taskInput.addEventListener("input", searchTasks)
+
+        function searchTasks() {
+            const searchTerm = taskInput.value.toLowerCase();
+            const tasks = JSON.parse(localStorage.getItem("worksTasks")) || [];
+            taskList.innerHTML = "";
+
+            tasks.forEach((task, index) => {
+                const taskName = task.name.toLowerCase();
+                const taskCategory = task.category.toLowerCase();
+
+                // Filter tasks based on search term
+                if (taskName.includes(searchTerm) || taskCategory.includes(searchTerm)) {
+                    const listItem = document.createElement("li");
+                    listItem.classList.add("bg-gray-100", "p-4", "flex", "justify-between", "items-center", "rounded-lg", "mb-2");
+
+                    const checkbox = searchTerm ? '' : '<input type="checkbox" onchange="toggleTaskStatus(${index})" ${task.completed ? "checked" : ""} class="mr-3">'
+
+                    listItem.innerHTML = `
+                <div class="flex items-center gap-3">
+                    ${checkbox}
+                    <div class="${task.completed ? 'line-through' : ''}">
+                        <p class="font-semibold">${task.name}</p>
+                        <p class="text-sm text-gray-500">${task.dateTime} | ${task.category}</p>
+                    </div>
+                </div>
+                <button onclick="confirmDelete(${index})" class="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+            `;
+                    taskList.appendChild(listItem);
+                }
+            });
+        }
+
+
+
+        window.onload = () => {
+            person.innerHTML = `${localStorage['user']}`
+            major.innerHTML = `${localStorage['major']}`
+        }
+
+        window.addEventListener("resize", function (){
+            if(window.innerWidth < 768){
+                container.classList.add("active");
+            container.classList.remove("nonActive");
+            container.classList.add("pointer-events-none");
+            container.classList.add("-ml-80");
+            rightArrow.classList.remove("opacity-0");
+            rightArrow.classList.remove("pointer-events-none");
+            rightArrow.classList.remove("active");
+            rightArrow.classList.add("nonActive");
+            }
+        })
+
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+
+            let greeting = '';
+            if (hours >= 5 && hours < 12) {
+                greeting = 'Good Morning';
+            } else if (hours >= 12 && hours < 18) {
+                greeting = 'Good Afternoon';
+            } else if (hours >= 18 && hours < 22) {
+                greeting = 'Good Evening';
+            } else {
+                greeting = 'Good Night';
+            }
+
+            document.getElementById('welcome').innerHTML = `${greeting}, <span class="text-blue-500 font-bold">${localStorage['user']}</span> from <span class="text-blue-500 font-bold">${localStorage['major']}</span>`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+
+        leftArrow.addEventListener('click', function () {
+            container.classList.add('active')
+            container.classList.remove('nonActive')
+            container.classList.add('pointer-events-none')
+            container.classList.add('-ml-80')
+            rightArrow.classList.remove('opacity-0')
+            rightArrow.classList.remove('pointer-events-none')
+            rightArrow.classList.remove('active')
+            rightArrow.classList.add('nonActive')
+        })
+
+        container.classList.remove('active')
+        container.classList.add('nonActive')
+        rightArrow.classList.add('active')
+        rightArrow.classList.remove('nonActive')
+        rightArrow.classList.add('opacity-0')
+        rightArrow.classList.add('pointer-events-none')
+        container.classList.remove('pointer-events-none')
+
+        rightArrow.addEventListener('click', function () {
+            container.classList.remove('active')
+            container.classList.add('nonActive')
+            container.classList.remove('-ml-80')
+            rightArrow.classList.add('active')
+            rightArrow.classList.remove('nonActive')
+            rightArrow.classList.add('opacity-0')
+            rightArrow.classList.add('pointer-events-none')
+            container.classList.remove('pointer-events-none')
+        })
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const mode = localStorage.getItem("mode") || "light";
+            if (mode === "dark") {
+                setDarkMode();
+            } else {
+                setLightMode();
+            }
+        });
+
+        function setDarkMode() {
+            texts.forEach(text => {
+                text.classList.add('text-white');
+                text.classList.remove('text-black');
+            });
+            welcome.classList.add('text-white')
+            clock.classList.add('text-white');
+            leftArrow.classList.add('text-white');
+            container.classList.remove('bg-white');
+            container.classList.add('bg-[#3C3D37]');
+            Light.classList.remove('bg-white');
+            Dark.classList.add('bg-black', 'text-white');
+            home.classList.remove('bg-gray-300');
+            home.classList.add('bg-black');
+            subContainers.forEach(subContainer => {
+                subContainer.classList.remove('bg-white');
+                subContainer.classList.add('bg-[#3C3D37]');
+            });
+
+            localStorage.setItem("mode", "dark");
+        }
+
+        function setLightMode() {
+            texts.forEach(text => {
+                text.classList.add('text-black');
+                text.classList.remove('text-white');
+            });
+            welcome.classList.remove('text-white')
+            clock.classList.remove('text-white');
+            leftArrow.classList.remove('text-white');
+            container.classList.add('bg-white');
+            container.classList.remove('bg-[#3C3D37]');
+            Light.classList.add('bg-white');
+            Dark.classList.remove('bg-black', 'text-white');
+            home.classList.add('bg-gray-300');
+            home.classList.remove('bg-black');
+            subContainers.forEach(subContainer => {
+                subContainer.classList.add('bg-white');
+                subContainer.classList.remove('bg-[#3C3D37]');
+            });
+
+            localStorage.setItem("mode", "light");
+        }
+
+        theme.addEventListener('click', function (event) {
+            event.stopPropagation();
+            if (Light.classList.contains('bg-white')) {
+                setDarkMode();
+            } else {
+                setLightMode();
+            }
+        });
+
+        createTaskButton.addEventListener("click", () => {
+            addTask.style.display = "block";
+        });
+
+        // Hide addTask form
+        cancelButton.addEventListener("click", () => {
+            addTask.style.display = "none";
+        });
+
+        // Load tasks from localStorage
+        function loadTasks() {
+            const tasks = JSON.parse(localStorage.getItem("worksTasks")) || [];
+            taskList.innerHTML = "";
+            tasks.forEach((task, index) => {
+                const listItem = document.createElement("li");
+                listItem.classList.add("bg-gray-100", "p-4", "flex", "justify-between", "items-center", "rounded-lg", "mb-2");
+
+                listItem.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" onchange="toggleTaskStatus(${index})" ${task.completed ? "checked" : ""} class="mr-3">
+                        <div class="${task.completed ? 'line-through' : ''}">
+                            <p class="font-semibold">${task.name}</p>
+                            <p class="text-sm text-gray-500">${task.dateTime} | ${task.category}</p>
+                        </div>
+                    </div>
+                    <button onclick="confirmDelete(${index})" class="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+                `;
+                taskList.appendChild(listItem);
+            });
+        }
+
+        // Toggle the completion status of a task
+        function toggleTaskStatus(index) {
+            const tasks = JSON.parse(localStorage.getItem("worksTasks")) || [];
+            tasks[index].completed = !tasks[index].completed;
+            localStorage.setItem("worksTasks", JSON.stringify(tasks));
+            loadTasks(); // Refresh the task list to reflect changes
+        }
+
+        // Existing functions for adding and deleting tasks, with no changes needed
+
+        // Modified confirmButton event listener to include the 'completed' status
+        confirmButton.addEventListener("click", () => {
+            const newTask = document.getElementById("newTask").value;
+            const newDateTime = document.getElementById("newDateTime").value;
+            const category = document.getElementById("category").value;
+
+            if (newTask && newDateTime) {
+                const task = {
+                    name: newTask,
+                    dateTime: newDateTime,
+                    category: category,
+                    completed: false // Add 'completed' status to track task completion
+                };
+                const tasks = JSON.parse(localStorage.getItem("personalTasks")) || [];
+                tasks.push(task);
+                localStorage.setItem("personalTasks", JSON.stringify(tasks));
+                loadTasks(); // Refresh the task list
+                addTask.style.display = "none"; // Hide form
+                document.getElementById("newTask").value = "";
+                document.getElementById("newDateTime").value = "";
+            } else {
+                alert("Please fill out all fields.");
+            }
+        });
+
+
+        // Function to display delete confirmation
+        function confirmDelete(index) {
+            // Show the delete confirmation modal
+            deleteConfirm.style.display = "block";
+
+            // Confirm button inside deleteConfirm
+            const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+            confirmDeleteButton.onclick = () => {
+                deleteTask(index);
+            };
+
+            // Cancel button inside deleteConfirm
+            const cancelDeleteButton = document.getElementById("cancelDeleteButton");
+            cancelDeleteButton.onclick = () => {
+                // Hide the delete confirmation modal
+                deleteConfirm.style.display = "none";
+            };
+        }
+
+        // Function to delete task
+        function deleteTask(index) {
+            // Hide the delete confirmation modal
+            deleteConfirm.style.display = "none";
+
+            // Get tasks from localStorage
+            const tasks = JSON.parse(localStorage.getItem("worksTasks")) || [];
+
+            // Remove task from tasks array
+            tasks.splice(index, 1);
+
+            // Save the updated tasks back to localStorage
+            localStorage.setItem("worksTasks", JSON.stringify(tasks));
+
+            // Refresh the task list
+            loadTasks();
+        }
+
+        // Load tasks when the page is loaded
+        document.addEventListener("DOMContentLoaded", loadTasks);
+
+    </script>
+</body>
+
+</html>
